@@ -37,5 +37,6 @@ public class Room {
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
     private List<Reservation> reservations;
+
 }
 

@@ -1,5 +1,5 @@
 package com.bookMyStay.repository;
 
-public interface FeedbackDao {
+public interface FeedbackDatabase {
 
 }

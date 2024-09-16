@@ -13,7 +13,6 @@ public interface CustomerDatabase extends JpaRepository<Customer, Long> {
 	Optional<Customer> findByEmail(String email);
 
 	List<Customer> findByToBeDeleted(Boolean toBeDeleted);
-
 	@Modifying
 	@Query("update Customer set name=?2 where customerId=?1")
 	Integer setCustomerEmail(Long customerId, String name);

@@ -52,6 +52,5 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER)
     private List<Feedback> feedbacks;
-
 }
 

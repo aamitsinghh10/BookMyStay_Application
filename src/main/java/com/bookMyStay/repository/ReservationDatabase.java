@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ReservationDao extends JpaRepository<Reservation, Long> {
+public interface ReservationDatabase extends JpaRepository<Reservation, Long> {
 
 	List<Reservation> findByCustomer(Customer customer);
 

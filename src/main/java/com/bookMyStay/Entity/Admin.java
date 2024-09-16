@@ -49,4 +49,5 @@ public class Admin {
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
+
 }

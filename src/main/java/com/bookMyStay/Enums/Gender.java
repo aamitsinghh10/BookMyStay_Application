@@ -1,6 +1,6 @@
 package com.bookMyStay.Enums;
 
 public enum Gender {
-    MALE,FEMALE,OTHER;
+    MALE, FEMALE, OTHER;
 }
 

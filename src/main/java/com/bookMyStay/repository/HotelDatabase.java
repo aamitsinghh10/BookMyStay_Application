@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface HotelDao extends JpaRepository<Hotel, Long> {
+public interface HotelDatabase extends JpaRepository<Hotel, Long> {
 
 	Optional<Hotel> findByHotelEmail(String email);
 

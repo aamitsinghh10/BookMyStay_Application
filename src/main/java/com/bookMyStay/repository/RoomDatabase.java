@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 
-public interface RoomDao extends JpaRepository<Room, Long>{
+public interface RoomDatabase extends JpaRepository<Room, Long>{
 
 	@Modifying
 	@Query("update Room set roomType=?2 where roomId=?1")

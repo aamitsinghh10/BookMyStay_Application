@@ -25,5 +25,4 @@ public enum HotelType {
 	LUXURY_TENT,
 	SELF_CARING_ACCOMODATION,
 	TINY_HOUSE
-
 }

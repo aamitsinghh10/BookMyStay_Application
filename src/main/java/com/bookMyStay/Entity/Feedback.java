@@ -30,6 +30,7 @@ public class Feedback {
     @NotEmpty
     @NotBlank
     private String feedbackContent;
+
     @NotNull
     private Integer rating;
 

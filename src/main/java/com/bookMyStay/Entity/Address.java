@@ -40,5 +40,4 @@ public class Address {
     @NotEmpty
     @NotBlank
     private String country;
-
 }

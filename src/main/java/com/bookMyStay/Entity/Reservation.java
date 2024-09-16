@@ -41,6 +41,5 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-
 }
 

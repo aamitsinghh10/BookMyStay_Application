@@ -27,5 +27,4 @@ public class DeleteReason {
     @NotEmpty
     @NotBlank
     private String reason;
-
 }

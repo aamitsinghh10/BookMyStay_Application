@@ -42,8 +42,11 @@ public class Customer {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
     private LocalDateTime registrationDateTime;
+
     private boolean toBeDeleted;
+
     private LocalDateTime deletionScheduledAt;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
