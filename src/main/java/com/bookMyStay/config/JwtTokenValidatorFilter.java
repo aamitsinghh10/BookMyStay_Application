@@ -1,8 +1,8 @@
 package com.bookMyStay.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import java.io.IOException;
+
+import javax.crypto.SecretKey;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,48 +14,65 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.crypto.SecretKey;
-import java.io.IOException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		String jwt= request.getHeader(SecurityConstants.JWT_HEADER);
+		// Retrieve the JWT token from the Authorization header
+		String jwt = request.getHeader(SecurityConstants.JWT_HEADER);
 
-
-		if(jwt != null) {
+		// If a token is present and starts with "Bearer ", process it
+		if (jwt != null && jwt.startsWith("Bearer ")) {
 			try {
-				//extracting the word Bearer
+				// Extract the actual token by removing the "Bearer " part
 				jwt = jwt.substring(7);
-				System.out.println(1);
 
-				SecretKey key= Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes());
-				Claims claims= Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+				// Create the signing key using the JWT secret
+				SecretKey key = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes());
 
-				String username= String.valueOf(claims.get("username"));
-				System.out.println(username);
-				String authorities= String.valueOf(claims.get("authorities"));
+				// Parse the JWT token and extract claims
+				Claims claims = Jwts.parser()
+						.setSigningKey(key)
+						.build()
+						.parseClaimsJws(jwt)
+						.getBody();
 
-				Authentication auth = new UsernamePasswordAuthenticationToken(username, null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
-//				List<GrantedAuthority> authorities=(List<GrantedAuthority>)claims.get("authorities");
-//				Authentication auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
+				// Extract username and authorities from the token claims
+				String username = claims.get("username", String.class);
+				String authorities = claims.get("authorities", String.class);
+
+				// Create an authentication object using the parsed username and authorities
+				Authentication auth = new UsernamePasswordAuthenticationToken(
+						username,
+						null,
+						AuthorityUtils.commaSeparatedStringToAuthorityList(authorities)
+				);
+
+				// Set the authentication in the SecurityContext
 				SecurityContextHolder.getContext().setAuthentication(auth);
 
 			} catch (Exception e) {
-				throw new BadCredentialsException("Invalid Token received..");
+				// Handle exceptions such as token parsing issues or invalid tokens
+				throw new BadCredentialsException("Invalid Token received.");
 			}
 		}
+
+		// Continue the filter chain
 		filterChain.doFilter(request, response);
 	}
 
-	//this time this validation filter has to be executed for all the apis except the /login api
+	// Exclude specific login APIs from JWT token validation
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-	    String path = request.getServletPath();
-	    return path.equals("/staywell/admins/login") || path.equals("/staywell/customers/login") || path.equals("/staywell/hotels/login");
+		String path = request.getServletPath();
+		return path.equals("/bookMyStay/admins/login") ||
+				path.equals("/bookMyStay/customers/login") ||
+				path.equals("/bookMyStay/hotels/login");
 	}
-
-
 }
