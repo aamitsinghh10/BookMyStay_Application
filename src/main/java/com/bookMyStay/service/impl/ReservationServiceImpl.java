@@ -83,6 +83,7 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
+	@Transactional
 	public String cancelReservation(Long reservationId) {
 		Customer customer = getCurrentLoggedInCustomer();
 
